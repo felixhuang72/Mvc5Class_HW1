@@ -27,6 +27,7 @@ namespace MVC5_ClassHW_Week1.Models
         [EmailAddress(ErrorMessage = "Email 格式錯誤")]
         public string Email { get; set; }
         [Required]
+        [RegularExpression(@"\d{4}-\d{6}", ErrorMessage = "手機格式錯誤 (xxxx-xxxxxx)")]
         public string 手機 { get; set; }
         public string 電話 { get; set; }
         public Nullable<bool> IsDelete { get; set; }
