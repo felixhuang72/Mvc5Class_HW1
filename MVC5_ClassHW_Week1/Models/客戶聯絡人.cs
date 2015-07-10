@@ -11,14 +11,22 @@ namespace MVC5_ClassHW_Week1.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     
     public partial class 客戶聯絡人
     {
+        [Key]
         public int Id { get; set; }
+        [Required]
         public int 客戶Id { get; set; }
+        [Required]
         public string 職稱 { get; set; }
+        [Required]        
         public string 姓名 { get; set; }
+        [Required]
+        [EmailAddress(ErrorMessage = "Email 格式錯誤")]
         public string Email { get; set; }
+        [Required]
         public string 手機 { get; set; }
         public string 電話 { get; set; }
         public Nullable<bool> IsDelete { get; set; }

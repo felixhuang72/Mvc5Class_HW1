@@ -11,6 +11,7 @@ namespace MVC5_ClassHW_Week1.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     
     public partial class 客戶資料
     {
@@ -19,13 +20,23 @@ namespace MVC5_ClassHW_Week1.Models
             this.客戶銀行資訊 = new HashSet<客戶銀行資訊>();
             this.客戶聯絡人 = new HashSet<客戶聯絡人>();
         }
-    
+        
+        [Key]
         public int Id { get; set; }
+        [Required]
         public string 客戶名稱 { get; set; }
+        [Required]
+        [StringLength(8, ErrorMessage = "最多 8 個字元")]
+        [MinLength(5, ErrorMessage = "最少 5 個字元")]
         public string 統一編號 { get; set; }
+        [Required]
         public string 電話 { get; set; }
+        [Required]
         public string 傳真 { get; set; }
+        [Required]
         public string 地址 { get; set; }
+        [Required]
+        [EmailAddress(ErrorMessage = "Email 格式錯誤")]
         public string Email { get; set; }
         public bool IsDelete { get; set; }
     
