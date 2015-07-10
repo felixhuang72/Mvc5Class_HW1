@@ -17,7 +17,8 @@ namespace MVC5_ClassHW_Week1.Controllers
         // GET: Contact
         public ActionResult Index()
         {
-            var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料);
+            var 客戶聯絡人 = db.客戶聯絡人.Include(客 => 客.客戶資料).Where(p => p.IsDelete == false && p.客戶資料.IsDelete == false);
+                
             return View(客戶聯絡人.ToList());
         }
 
@@ -114,10 +115,20 @@ namespace MVC5_ClassHW_Week1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
-            db.客戶聯絡人.Remove(客戶聯絡人);
-            db.SaveChanges();
+            var data = db.客戶聯絡人.Find(id);
+            if (data != null)
+            {
+                data.IsDelete = true;
+                db.SaveChanges();
+            }
+
             return RedirectToAction("Index");
+
+
+            //客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            //db.客戶聯絡人.Remove(客戶聯絡人);
+            //db.SaveChanges();
+            //return RedirectToAction("Index");
         }
 
         public ActionResult ChkEmailExist(string Email, int 客戶Id)

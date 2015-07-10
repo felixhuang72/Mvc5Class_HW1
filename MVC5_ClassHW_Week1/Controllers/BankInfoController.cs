@@ -17,7 +17,8 @@ namespace MVC5_ClassHW_Week1.Controllers
         // GET: BankInfo
         public ActionResult Index()
         {
-            var 客戶銀行資訊 = db.客戶銀行資訊.Include(客 => 客.客戶資料);
+            var 客戶銀行資訊 = db.客戶銀行資訊.Include(客 => 客.客戶資料)
+                .Where(p=>p.IsDelete==false && p.客戶資料.IsDelete==false);
             return View(客戶銀行資訊.ToList());
         }
 
@@ -114,10 +115,19 @@ namespace MVC5_ClassHW_Week1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            客戶銀行資訊 客戶銀行資訊 = db.客戶銀行資訊.Find(id);
-            db.客戶銀行資訊.Remove(客戶銀行資訊);
-            db.SaveChanges();
+            var data = db.客戶銀行資訊.Find(id);
+            if (data != null)
+            {
+                data.IsDelete = true;
+                db.SaveChanges();
+            }
+
             return RedirectToAction("Index");
+
+            //客戶銀行資訊 客戶銀行資訊 = db.客戶銀行資訊.Find(id);
+            //db.客戶銀行資訊.Remove(客戶銀行資訊);
+            //db.SaveChanges();
+            //return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

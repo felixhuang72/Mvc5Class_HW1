@@ -17,7 +17,7 @@ namespace MVC5_ClassHW_Week1.Controllers
         // GET: Customer
         public ActionResult Index()
         {
-            return View(db.客戶資料.ToList());
+            return View(db.客戶資料.Where(p=>p.IsDelete.Equals(false)).ToList());
         }
 
         // GET: Customer/Details/5
@@ -109,10 +109,14 @@ namespace MVC5_ClassHW_Week1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            客戶資料 客戶資料 = db.客戶資料.Find(id);
-            db.客戶資料.Remove(客戶資料);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            var data = db.客戶資料.Find(id);
+            if (data != null)
+            {
+                data.IsDelete = true;
+                db.SaveChanges();
+            }
+            
+            return RedirectToAction("Index");            
         }
 
         protected override void Dispose(bool disposing)
