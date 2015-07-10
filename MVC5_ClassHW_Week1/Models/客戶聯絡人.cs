@@ -12,6 +12,7 @@ namespace MVC5_ClassHW_Week1.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
     
     public partial class 客戶聯絡人
     {
@@ -25,6 +26,7 @@ namespace MVC5_ClassHW_Week1.Models
         public string 姓名 { get; set; }
         [Required]
         [EmailAddress(ErrorMessage = "Email 格式錯誤")]
+        [Remote("ChkEmailExist", "Contact", AdditionalFields = "客戶Id", ErrorMessage = "這個 Email 已經存在")]
         public string Email { get; set; }
         [Required]
         [RegularExpression(@"\d{4}-\d{6}", ErrorMessage = "手機格式錯誤 (xxxx-xxxxxx)")]

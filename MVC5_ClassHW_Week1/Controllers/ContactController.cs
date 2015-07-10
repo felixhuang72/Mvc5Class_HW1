@@ -120,6 +120,21 @@ namespace MVC5_ClassHW_Week1.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult ChkEmailExist(string Email, int 客戶Id)
+        {
+            var result = from p in db.客戶聯絡人
+                         where p.Email == Email && p.客戶Id == 客戶Id
+                         select p;
+            if (result.Count() == 0)
+            {
+                return Content("true");
+            }
+            else
+            {
+                return Content("false");
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
