@@ -12,27 +12,33 @@ namespace MVC5_ClassHW_Week1.Controllers
 {
     public class CustomerController : Controller
     {
-        private CustomerEntities db = new CustomerEntities();
+        //private CustomerEntities db = new CustomerEntities();
+        客戶資料Repository rep = RepositoryHelper.Get客戶資料Repository();
 
         // GET: Customer
         public ActionResult Index()
         {
-            return View(db.客戶資料.Where(p=>p.IsDelete.Equals(false)).ToList());
+            var data = rep.GetTop5_Datas();
+            //return View(db.客戶資料.Where(p=>p.IsDelete.Equals(false)).ToList());
+            return View(data);
         }
 
         // GET: Customer/Details/5
         public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            客戶資料 客戶資料 = db.客戶資料.Find(id);
-            if (客戶資料 == null)
-            {
-                return HttpNotFound();
-            }
-            return View(客戶資料);
+            客戶資料 data = rep.Find(id.Value);
+            return View(data);
+
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            //客戶資料 客戶資料 = db.客戶資料.Find(id);
+            //if (客戶資料 == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //return View(客戶資料);
         }
 
         // GET: Customer/Create
@@ -50,8 +56,11 @@ namespace MVC5_ClassHW_Week1.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.客戶資料.Add(客戶資料);
-                db.SaveChanges();
+                //db.客戶資料.Add(客戶資料);
+                //db.SaveChanges();
+             
+                rep.Add(客戶資料);
+                rep.UnitOfWork.Commit();                
                 return RedirectToAction("Index");
             }
 
@@ -65,7 +74,9 @@ namespace MVC5_ClassHW_Week1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶資料 客戶資料 = db.客戶資料.Find(id);
+            //客戶資料 客戶資料 = db.客戶資料.Find(id);
+
+            客戶資料 客戶資料 = rep.Find(id.Value);
             if (客戶資料 == null)
             {
                 return HttpNotFound();
@@ -82,8 +93,12 @@ namespace MVC5_ClassHW_Week1.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(客戶資料).State = EntityState.Modified;
-                db.SaveChanges();
+                
+                //db.Entry(客戶資料).State = EntityState.Modified;
+                //db.SaveChanges();
+                ((CustomerEntities)rep.UnitOfWork.Context).Entry(客戶資料).State = EntityState.Modified;
+                rep.UnitOfWork.Commit();
+
                 return RedirectToAction("Index");
             }
             return View(客戶資料);
@@ -96,7 +111,8 @@ namespace MVC5_ClassHW_Week1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶資料 客戶資料 = db.客戶資料.Find(id);
+            //客戶資料 客戶資料 = db.客戶資料.Find(id);
+            客戶資料 客戶資料 = rep.Find(id.Value);
             if (客戶資料 == null)
             {
                 return HttpNotFound();
@@ -109,13 +125,16 @@ namespace MVC5_ClassHW_Week1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var data = db.客戶資料.Find(id);
-            if (data != null)
-            {
-                data.IsDelete = true;
-                db.SaveChanges();
-            }
+            //var data = db.客戶資料.Find(id);
+            //if (data != null)
+            //{
+            //    data.IsDelete = true;
+            //    db.SaveChanges();
+            //}
+            rep.Delete(rep.Find(id));
+            rep.UnitOfWork.Commit();
             
+
             return RedirectToAction("Index");            
         }
 
